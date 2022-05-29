@@ -4,7 +4,7 @@
 * Author: Dawid Wesierski
 * Language: C
 * To Compile: Microsoft Visual Studio Community 2022 (64-bit) Version 17.2
-* Version: 0.0.0.2
+* Version: 0.0.0.3
 * Date: 24.05.2022
 *
 * ----------------------------------------------------------------------------------
@@ -72,7 +72,7 @@ void print_help(void)
 //for linked_vlan_list its 0<VLAN_ID<4096 TPID from allowable_tpid array
 bool check_is_data_correct(struct linked_vlan_list tested_value)
 {
-	if (tested_value.VLAN_ID >= 0 ||
+	if (tested_value.VLAN_ID >= 0 &&
 		tested_value.VLAN_ID <= 4096)
 	{
 		//iterating and checking our TPID is in the allowable tpid values 
@@ -143,9 +143,26 @@ bool init_linked_vlan_list(struct linked_vlan_list** stack)
 
 
 //option 2
-void delete_value_linked_vlan_list(struct linked_vlan_list* stack)
+bool delete_value_linked_vlan_list(struct linked_vlan_list** stack)
 {
-	printf("--------here will be deleteing algorithm-------\n");
+	if (*stack != NULL)
+	{
+		if ((*stack)->next != NULL)
+		{
+			struct linked_vlan_list* auxiliary = *stack;
+			*stack = (*stack)->next;
+			free(auxiliary);
+			printf("-----------------VALUE-DELETED---------------\n");
+		}
+		else
+		{
+			free(*stack);
+			*stack = NULL;
+			printf("-----------------ARRAY-EMPTY---------------");
+		}
+		return true;
+	}
+	return false;
 }
 
 
@@ -160,14 +177,14 @@ bool print_values_linked_vlan_list(struct linked_vlan_list* stack)
 		printf("-----------------PRINTING-VALUES---------------\n");
 		while (stack->next != NULL)
 		{
-			printf("value %hu", counter++);
-			printf("%10s %hu\n", "vlan id", stack->VLAN_ID);
-			printf("%10s %s\n", "vlan id", stack->TPID);
+			printf("value %3hu\n", counter++);
+			printf("%10s %3hu\n", "vlan id", stack->VLAN_ID);
+			printf("%10s %3s\n", "TPID", stack->TPID);
 			stack = stack->next;
 		}
-		printf("value %hu", counter++);
-		printf("%10s %hu\n", "vlan id", stack->VLAN_ID);
-		printf("%10s %s\n", "vlan id", stack->TPID);
+		printf("value %3hu\n", counter++);
+		printf("%10s %3hu\n", "vlan id", stack->VLAN_ID);
+		printf("%10s %3s\n", "TPID", stack->TPID);
 		printf("\n");
 		return true;
 	}
@@ -185,14 +202,26 @@ bool sort_values_linked_vlan_list(struct linked_vlan_list* stack)
 //option 5
 void delete_linked_vlan_list(struct linked_vlan_list* stack)
 {
-	printf("-here will be algorithm for deleting / cleaining memory-\n");
+	if (stack != NULL)
+	{
+		while (stack->next != NULL)
+		{
+			
+			struct linked_vlan_list* auxiliary = stack;
+			stack = stack->next;
+			free(auxiliary);
+		}
+		free(stack);
+		printf("--------------MEMORY-CLEASENED------------\n");
+	}
 }
+
 
 int main(void)
 {
 	struct linked_vlan_list* vlan_stack;
 	vlan_stack = NULL;
-	char buffer_eater = NULL; //this value is added to deal with c buffer 
+	char buffer_eater; //this value is added to deal with c buffer 
 	unsigned short int choice = 0;
 	while (choice != 5)
 	{
@@ -217,7 +246,8 @@ int main(void)
 				}
 				break;
 			case 2:
-				delete_value_linked_vlan_list(&vlan_stack);
+				if (!delete_value_linked_vlan_list(&vlan_stack))
+					printf("------------------NO-VALUES-TO-DELETE----------------\n");
 				break;
 			case 3:
 				if (!print_values_linked_vlan_list(vlan_stack))
@@ -228,7 +258,7 @@ int main(void)
 					printf("------------------NO-VALUES-TO-PRINT----------------\n");
 				break;
 			case 5:
-				delete_linked_vlan_list(&vlan_stack);
+				delete_linked_vlan_list(vlan_stack);
 				break;
 			default:
 				print_wrong_input_data_mssg();

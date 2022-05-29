@@ -8,7 +8,7 @@ struct linked_vlan_list
 {
 	unsigned short int VLAN_ID;
 	char TPID[7];
-	struct linked_list* next;
+	struct linked_vlan_list* next;
 };
 
 const char allowable_tpid_values[number_of_tpid_values][7] = {

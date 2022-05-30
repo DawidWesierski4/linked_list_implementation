@@ -4,14 +4,17 @@
 * Author: Dawid Wesierski
 * Language: C
 * To Compile: Microsoft Visual Studio Community 2022 (64-bit) Version 17.2
-* Version: 0.0.1.0
-* Date: 24.05.2022
+* Version: 0.0.1.1
+* Date: 30.05.2022
 *
 * ----------------------------------------------------------------------------------
 * 
 * Description:
 * this program shows the implementation of the linked list concept it works similar
-* to stack the memory is dynamicly allocated so but you can only get 
+* to stack the memory is dynamicly allocated so but you can only get out one value 
+* from the TOP of the stack 
+* 
+*	
 * 
 *==================================================================================*/
 #include "Header.h"
@@ -265,13 +268,6 @@ void delete_linked_vlan_list(struct linked_vlan_list* stack)
 }
 
 
-//option 6
-void testing_debug(struct linked_vlan_list* stack)
-{
-	printf("%d\n",compare_vlan(*stack, *stack->next));
-}
-
-
 int main(void)
 {
 	struct linked_vlan_list* vlan_stack;
@@ -322,9 +318,6 @@ int main(void)
 			case 5:
 				delete_linked_vlan_list(vlan_stack);
 				break;
-			case 6:
-				testing_debug(vlan_stack);
-				break;
 			default:
 				print_wrong_input_data_mssg();
 			}
@@ -332,7 +325,7 @@ int main(void)
 		else
 		{
 			//this will take the remaining character from buffer
-			while ((buffer_eater = getchar()) != '\n' && buffer_eater != EOF);		
+			while ((buffer_eater = getchar()) != '\n' || buffer_eater != EOF);		
 			print_wrong_input_data_mssg();
 		}
 	}

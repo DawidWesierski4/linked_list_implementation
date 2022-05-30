@@ -4,7 +4,7 @@
 * Author: Dawid Wesierski
 * Language: C
 * To Compile: Microsoft Visual Studio Community 2022 (64-bit) Version 17.2
-* Version: 0.0.0.4
+* Version: 0.0.1.0
 * Date: 24.05.2022
 *
 * ----------------------------------------------------------------------------------
@@ -174,7 +174,7 @@ bool print_values_linked_vlan_list(struct linked_vlan_list* stack)
 	else
 	{
 		printf("-----------------PRINTING-VALUES---------------\n");
-		while (stack->next != NULL)
+		while (stack->next != NULL) //do while basicly 
 		{
 			printf("value %3hu\n", counter++);
 			printf("%10s %3hu\n", "vlan id", stack->VLAN_ID);
@@ -192,12 +192,20 @@ bool print_values_linked_vlan_list(struct linked_vlan_list* stack)
 
 //returns true when vlan 1 > vlan 2 (they are compared based on ID if the ID are the 
 //same they are compared based on the TPID)
-short unsigned int compare_vlan(struct linked_vlan_list vlan1, struct linked_vlan_list vlan2)
+short int compare_vlan(struct linked_vlan_list vlan1, struct linked_vlan_list vlan2)
 {
 	if (vlan1.VLAN_ID > vlan2.VLAN_ID)
 		return 1;
 	else if (vlan1.VLAN_ID == vlan2.VLAN_ID)
-		return 0;
+	{
+		//this part is comparing by TPID
+		if (strcmp(vlan1.TPID, vlan2.TPID) < 1)
+			return -1;
+		else if (strcmp(vlan1.TPID, vlan2.TPID) == 0)
+			return 0;
+		else
+			return 1;
+	}
 	else
 		return -1;
 }
@@ -221,20 +229,18 @@ void swap_vlan(struct linked_vlan_list* vlan1, struct linked_vlan_list* vlan2)
 //option 4 (sorted by bubble sort)
 bool sort_values_linked_vlan_list(struct linked_vlan_list* stack,unsigned int number_of_nodes)
 {
-	struct linked_vlan_list* auxiliary_i, *auxiliary_j;
+	struct linked_vlan_list* auxiliary;
 	if (stack != NULL)
 	{
-		auxiliary_i = stack;
 		for (unsigned int i = 0; i < number_of_nodes-1; i++)
 		{
-			auxiliary_j = stack;
+			auxiliary = stack;
 			for (unsigned int j = 0; j < number_of_nodes - i - 1; j++)
 			{
-				if (compare_vlan(*auxiliary_i, *auxiliary_j)>0)
-					swap_vlan(auxiliary_i, auxiliary_j);
-				auxiliary_j =auxiliary_j->next;
+					if (compare_vlan(*auxiliary, *auxiliary->next) > 0)
+						swap_vlan(auxiliary, auxiliary->next);
+				auxiliary =auxiliary->next;
 			}
-			auxiliary_i = auxiliary_i->next;
 		}
 		return true;
 	}
@@ -311,7 +317,7 @@ int main(void)
 				break;
 			case 4:
 				if (!sort_values_linked_vlan_list(vlan_stack,number_of_nodes))
-					printf("------------------NO-VALUES-TO-PRINT----------------\n");
+					printf("------------------NO-VALUES-TO-SORT----------------\n");
 				break;
 			case 5:
 				delete_linked_vlan_list(vlan_stack);

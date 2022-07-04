@@ -1,4 +1,4 @@
-﻿/*===================================================================================
+﻿/*==============================================================================
 * Title: Linked list implementation concept 
 *
 * Author: Dawid Wesierski
@@ -7,20 +7,19 @@
 * Version: 0.0.1.1
 * Date: 30.05.2022
 *
-* ----------------------------------------------------------------------------------
+* ------------------------------------------------------------------------------
 * 
 * Description:
-* this program shows the implementation of the linked list concept it works similar
-* to stack the memory is dynamicly allocated so but you can only get out one value 
-* from the TOP of the stack 
-* 
+* this program shows the implementation of the linked list concept it works 
+* similar to stack the memory is dynamicly allocated so but you can only get out
+* one value  from the TOP of the stack 
 *	
 * 
-*==================================================================================*/
+*=============================================================================*/
 #include "Header.h"
 
 
-print_wrong_input_data_mssg(void)
+void print_wrong_input_data_mssg(void)
 {
 	printf("----------WRONG-INPUT-DATA-TRY-AGAIN-----------\n");
 	printf("\n");
@@ -102,9 +101,9 @@ bool add_value_linked_vlan_list(struct linked_vlan_list** stack)
 	if (auxiliary!=NULL)
 	{
 		printf("1 - input Vlan ID\n");
-		scanf_s("%hu", &auxiliary->VLAN_ID);
+		scanf("%hu", &auxiliary->VLAN_ID);
 		printf("2 - input TPID\n");
-		scanf_s("%s", auxiliary->TPID, 7);
+		scanf("%s", auxiliary->TPID);
 		if (!check_is_data_correct(*auxiliary))
 		{
 			auxiliary->next = (*stack);
@@ -128,15 +127,15 @@ bool init_linked_vlan_list(struct linked_vlan_list** stack)
 	if (*stack != NULL)
 	{
 		printf("1 - input Vlan ID\n");
-		scanf_s("%hu", &(*stack)->VLAN_ID);
+		scanf("%hu", &(*stack)->VLAN_ID);
 		printf("2 - input TPID\n");
-		scanf_s("%s", (*stack)->TPID, 7);
+		scanf("%s", (*stack)->TPID);
 		(*stack)->next = NULL;
 		if (!check_is_data_correct(*(*stack)))
 			return true; 
 	}
 	else
-		printf("------ERROR DURING INITIALIZATION ALLOCATION OF THE MEMORY FAILED--------\n");
+		printf("-ERROR DURING INITIALIZATION ALLOCATION OF THE MEMORY FAILED-\n");
 	while (getchar() != '\n'); //clear buffer in case excesive input data 
 	*stack = NULL;
 	print_wrong_input_data_mssg();
@@ -193,9 +192,10 @@ bool print_values_linked_vlan_list(struct linked_vlan_list* stack)
 }
 
 
-//returns true when vlan 1 > vlan 2 (they are compared based on ID if the ID are the 
-//same they are compared based on the TPID)
-short int compare_vlan(struct linked_vlan_list vlan1, struct linked_vlan_list vlan2)
+//returns true when vlan 1 > vlan 2 (they are compared based on ID if the ID 
+//are the same they are compared based on the TPID)
+short int compare_vlan(struct linked_vlan_list vlan1, 
+   struct linked_vlan_list vlan2)
 {
 	if (vlan1.VLAN_ID > vlan2.VLAN_ID)
 		return 1;
@@ -216,15 +216,16 @@ short int compare_vlan(struct linked_vlan_list vlan1, struct linked_vlan_list vl
 
 void swap_vlan(struct linked_vlan_list* vlan1, struct linked_vlan_list* vlan2)
 {
-	struct linked_vlan_list* auxiliary = (struct linked_vlan_list*)malloc(sizeof(struct linked_vlan_list));
+	struct linked_vlan_list* auxiliary = 
+   (struct linked_vlan_list*)malloc(sizeof(struct linked_vlan_list));
 	if (auxiliary != NULL)
 	{
 		*auxiliary = *vlan1;
 		vlan1->VLAN_ID = vlan2->VLAN_ID;
-		strcpy_s(vlan1->TPID, 7, vlan2->TPID);
+		strcpy(vlan1->TPID, vlan2->TPID);
 
 		vlan2->VLAN_ID = auxiliary->VLAN_ID;
-		strcpy_s(vlan2->TPID, 7, auxiliary->TPID);
+		strcpy(vlan2->TPID, auxiliary->TPID);
 	}
 }
 
@@ -278,7 +279,7 @@ int main(void)
 	while (choice != 5)
 	{
 		print_menu();
-		if (scanf_s("%hu", &choice))
+		if (scanf("%hu", &choice))
 		{
 			switch (choice)
 			{

@@ -242,7 +242,7 @@ unsigned int number_of_nodes)
 */
 
 
-//option 5
+//option 4
 void delete_linked_vlan_list(struct linked_vlan_list* stack)
 {
 	if (stack != NULL)
@@ -266,7 +266,7 @@ int main(void)
 	char buffer_eater; //this value is added to deal with c buffer 
 	unsigned int number_of_nodes = 0;
 	unsigned short int choice = 0;
-	while (choice != 5)
+	while (choice != 4)
 	{
 		print_menu();
 		if (scanf("%hu", &choice))

@@ -16,73 +16,60 @@
 *	
 * 
 *=============================================================================*/
-#include "Header.h"
+#include "header.h"
 
 
-void print_wrong_input_data_mssg(void)
+void print_wrong_input_data_msg(void)
 {
-	printf("----------WRONG-INPUT-DATA-TRY-AGAIN-----------\n");
+	printf("---WRONG INPUT DATA TRY AGAIN---\n");
 	printf("\n");
 }
 
 
 void print_menu(void)
 {
-	printf("\n");
-	printf("------IMPUT-OPTION-YOU-WANT-TO-EXECUTE---------\n");
-	printf("0-HELP \n");
-	printf("1-ADD TO THE ARRAY \n");
-	printf("2-DELETE FROM THE ARRAY \n");
-	printf("3-PRINT THE ARRAY \n");
-	printf("4-SORT ARRAY \n");
-	printf("5-CLEAN ARRAY / EXIT \n");
-	printf("\n");
+   printf("\n"
+   "---INPUT OPTION YOU WANT TO EXECUTE---\n"
+   "0 - Help\n"
+   "1 - Add value to the array \n"
+   "2 - Delete value from the array \n"
+   "3 - Display values from the array \n"
+   "4 - Delete the whole array, release the memory and exit the program\n");
 }
 
 
 //option 0
 void print_help(void) 
 {
-	printf("\n");
-	printf("----------DESCRIPTION-OF-THE-OPTIONS-----------\n");                                 
-	printf("1-ADD TO THE ARRAY \n");
-	printf("This option makes you innput 2 values - Vlan Id  \n");
-	printf("and TPID (TPID should be one of the 3 values   \n");
-	printf("\"0x8100\", \"0x9100\", \"0x88a8\"\n");
-	printf("\n");
-	printf("2-DELETE FROM THE ARRAY \n");
-	printf("this option delets the last added value to \n");
-	printf("the array, you can only delete the last value\n");
-	printf("\n");
-	printf("3-PRINT THE ARRAY \n");
-	printf("this function prints every value in the array \n");
-	printf("from the newest to the oldest\n");
-	printf("\n");
-	printf("4-SORT ARRAY \n");
-	printf("this functions sorts the inputed array in \n");
-	printf("ascending order if the ID is the same the \n");
-	printf("second criteria to for sorting is TPID value\n");
-	printf("(also in ascending order\n");
-	printf("\n");
-	printf("5-CLEAN ARRAY / EXIT \n");
-	printf("releses the memory ocupied by the program then \n");
-	printf("exicts from the program\n");
-	printf("\n");
+	printf("---DESCRIPTION OF THE OPTIONS--- \n"
+   "1 - Add value to the array \n"
+   "This option makes you input 2 values - Vlan id and tpid (tpid should be \n"
+   "one of the 3 allovable Tpid values - \"0x8100\", \"0x9100\", \"0x88a8\") \n"
+   "\n"
+   "2 - Delete Value from the array \n"
+   "This option lets you delete value from the array. \n"
+   "\n"
+   "3 - Print the array \n "
+   "This option prints every value that you have added to the array. \n"
+   "\n"
+   "4 - Delete the array and clean the memory \n "
+   "This option lets you release the memory that was taken for this array and \n"
+   "also deletes the whole array. \n");
 }
 
 
-//for linked_vlan_list its 0<VLAN_ID<4096 TPID from allowable_tpid array
+//for linked_vlan_list its 0<vlan_id<4096 tpid from allowable_tpid array
 bool check_is_data_correct(struct linked_vlan_list tested_value)
 {
-	if (tested_value.VLAN_ID >= 0 &&
-		tested_value.VLAN_ID <= 4096)
+	if (tested_value.vlan_id >= 0 &&
+		tested_value.vlan_id <= 4096)
 	{
-		//iterating and checking our TPID is in the allowable tpid values 
-		for (int i = 0; i < number_of_tpid_values; i++)
+		//iterating and checking our tpid is in the allowable tpid values 
+		for (int i = 0; i < NUMBER_OF_TPID_VALUES; i++)
 		{
-			if (!strcmp(tested_value.TPID, allowable_tpid_values[i]))
+			if (!strcmp(tested_value.tpid, allowable_tpid_values[i]))
 			{
-				printf("-------------DATA-VALIDATION-SUCESFOUL-------------\n");
+				printf("---DATA VALIDATION SUCCESSFUL---\n");
 				return 0;
 			}
 		}
@@ -91,19 +78,18 @@ bool check_is_data_correct(struct linked_vlan_list tested_value)
 }
 
 
-
 //option 1
 bool add_value_linked_vlan_list(struct linked_vlan_list** stack) 
 {
 	struct linked_vlan_list* auxiliary;
-	auxiliary = (struct linked_vlan_list*)malloc(sizeof(struct linked_vlan_list));
-	printf("-----------------ADDING-VALUES-----------------\n");
+   auxiliary = (struct linked_vlan_list*)malloc(sizeof(struct linked_vlan_list));
+	printf("---ADDING VALUES---\n");
 	if (auxiliary!=NULL)
 	{
 		printf("1 - input Vlan ID\n");
-		scanf("%hu", &auxiliary->VLAN_ID);
-		printf("2 - input TPID\n");
-		scanf("%s", auxiliary->TPID);
+		scanf("%hu", &auxiliary->vlan_id);
+		printf("2 - input tpid\n");
+		scanf("%s", auxiliary->tpid);
 		if (!check_is_data_correct(*auxiliary))
 		{
 			auxiliary->next = (*stack);
@@ -112,9 +98,9 @@ bool add_value_linked_vlan_list(struct linked_vlan_list** stack)
 		}
 	}
 	else
-		printf("------ERROR DURING ALLOCATION OF THE MEMORY FOR NEW VALUE--------\n");
+		printf("---ERROR DURING ALLOCATION OF THE MEMORY FOR THE NEW VALUE---\n");
 	while (getchar() != '\n'); //clear buffer in case excesive input data 
-	print_wrong_input_data_mssg();
+	print_wrong_input_data_msg();
 	return false;
 }
 
@@ -123,22 +109,23 @@ bool add_value_linked_vlan_list(struct linked_vlan_list** stack)
 bool init_linked_vlan_list(struct linked_vlan_list** stack)
 {
 	*stack = (struct linked_vlan_list*)malloc(sizeof(struct linked_vlan_list));
-	printf("-----------------ADDING-VALUES-----------------\n");
+	printf("---ADDING VALUES---\n");
 	if (*stack != NULL)
 	{
 		printf("1 - input Vlan ID\n");
-		scanf("%hu", &(*stack)->VLAN_ID);
-		printf("2 - input TPID\n");
-		scanf("%s", (*stack)->TPID);
+		scanf("%hu", &(*stack)->vlan_id);
+		printf("2 - input tpid\n");
+		scanf("%s", (*stack)->tpid);
 		(*stack)->next = NULL;
 		if (!check_is_data_correct(*(*stack)))
 			return true; 
 	}
 	else
-		printf("-ERROR DURING INITIALIZATION ALLOCATION OF THE MEMORY FAILED-\n");
+		printf("---ERROR DURING INITIALIZATION---\n"
+      "---ALLOCATION OF THE MEMORY FAILED---\n");
 	while (getchar() != '\n'); //clear buffer in case excesive input data 
 	*stack = NULL;
-	print_wrong_input_data_mssg();
+	print_wrong_input_data_msg();
 	return false;
 }
 
@@ -153,13 +140,13 @@ bool delete_value_linked_vlan_list(struct linked_vlan_list** stack)
 			struct linked_vlan_list* auxiliary = *stack;
 			*stack = (*stack)->next;
 			free(auxiliary);
-			printf("-----------------VALUE-DELETED---------------\n");
+			printf("---VALUE DELETED--\n");
 		}
 		else
 		{
 			free(*stack);
 			*stack = NULL;
-			printf("-----------------ARRAY-EMPTY---------------");
+			printf("---ARRAY IS EMPTY---");
 		}
 		return true;
 	}
@@ -179,13 +166,13 @@ bool print_values_linked_vlan_list(struct linked_vlan_list* stack)
 		while (stack->next != NULL) //do while basicly 
 		{
 			printf("value %3hu\n", counter++);
-			printf("%10s %3hu\n", "vlan id", stack->VLAN_ID);
-			printf("%10s %3s\n", "TPID", stack->TPID);
+			printf("%10s %3hu\n", "vlan id", stack->vlan_id);
+			printf("%10s %3s\n", "tpid", stack->tpid);
 			stack = stack->next;
 		}
 		printf("value %3hu\n", counter++);
-		printf("%10s %3hu\n", "vlan id", stack->VLAN_ID);
-		printf("%10s %3s\n", "TPID", stack->TPID);
+		printf("%10s %3hu\n", "vlan id", stack->vlan_id);
+		printf("%10s %3s\n", "tpid", stack->tpid);
 		printf("\n");
 		return true;
 	}
@@ -193,18 +180,18 @@ bool print_values_linked_vlan_list(struct linked_vlan_list* stack)
 
 
 //returns true when vlan 1 > vlan 2 (they are compared based on ID if the ID 
-//are the same they are compared based on the TPID)
+//are the same they are compared based on the tpid)
 short int compare_vlan(struct linked_vlan_list vlan1, 
    struct linked_vlan_list vlan2)
 {
-	if (vlan1.VLAN_ID > vlan2.VLAN_ID)
+	if (vlan1.vlan_id > vlan2.vlan_id)
 		return 1;
-	else if (vlan1.VLAN_ID == vlan2.VLAN_ID)
+	else if (vlan1.vlan_id == vlan2.vlan_id)
 	{
-		//this part is comparing by TPID
-		if (strcmp(vlan1.TPID, vlan2.TPID) < 1)
+		//this part is comparing by tpid
+		if (strcmp(vlan1.tpid, vlan2.tpid) < 1)
 			return -1;
-		else if (strcmp(vlan1.TPID, vlan2.TPID) == 0)
+		else if (strcmp(vlan1.tpid, vlan2.tpid) == 0)
 			return 0;
 		else
 			return 1;
@@ -214,6 +201,8 @@ short int compare_vlan(struct linked_vlan_list vlan1,
 }
 
 
+/* THIS IS OPTIONAL SORT ALGORITHM 
+
 void swap_vlan(struct linked_vlan_list* vlan1, struct linked_vlan_list* vlan2)
 {
 	struct linked_vlan_list* auxiliary = 
@@ -221,17 +210,17 @@ void swap_vlan(struct linked_vlan_list* vlan1, struct linked_vlan_list* vlan2)
 	if (auxiliary != NULL)
 	{
 		*auxiliary = *vlan1;
-		vlan1->VLAN_ID = vlan2->VLAN_ID;
-		strcpy(vlan1->TPID, vlan2->TPID);
+		vlan1->vlan_id = vlan2->vlan_id;
+		strcpy(vlan1->tpid, vlan2->tpid);
 
-		vlan2->VLAN_ID = auxiliary->VLAN_ID;
-		strcpy(vlan2->TPID, auxiliary->TPID);
+		vlan2->vlan_id = auxiliary->vlan_id;
+		strcpy(vlan2->tpid, auxiliary->tpid);
 	}
 }
 
 
-//option 4 (sorted by bubble sort)
-bool sort_values_linked_vlan_list(struct linked_vlan_list* stack,unsigned int number_of_nodes)
+bool sort_values_linked_vlan_list(struct linked_vlan_list* stack,
+unsigned int number_of_nodes)
 {
 	struct linked_vlan_list* auxiliary;
 	if (stack != NULL)
@@ -250,6 +239,7 @@ bool sort_values_linked_vlan_list(struct linked_vlan_list* stack,unsigned int nu
 	}
 	return false;
 }
+*/
 
 
 //option 5
@@ -290,44 +280,40 @@ int main(void)
 				if (vlan_stack == NULL)
 				{
 					if (!init_linked_vlan_list(&vlan_stack))
-						printf("--------------INITIALIZATION-FAILED------------\n");
+						printf("---INITIALIZATION FAILED---\n");
 					else
 						number_of_nodes = 1;
 				}
 				else
 				{
 					if (!add_value_linked_vlan_list(&vlan_stack))
-						printf("-----------------ADDING-FAILED-----------------\n");
+						printf("---ADDING FAILED---\n");
 					else
 						number_of_nodes++;
 				}
 				break;
 			case 2:
 				if (!delete_value_linked_vlan_list(&vlan_stack))
-					printf("------------------NO-VALUES-TO-DELETE----------------\n");
+					printf("---NO VALUES TO DELETE---\n");
 				else
 					number_of_nodes--;
 				break;
 			case 3:
 				if (!print_values_linked_vlan_list(vlan_stack))
-					printf("------------------NO-VALUES-TO-PRINT----------------\n");
+					printf("---NO VALUES TO PRINT---\n");
 				break;
 			case 4:
-				if (!sort_values_linked_vlan_list(vlan_stack,number_of_nodes))
-					printf("------------------NO-VALUES-TO-SORT----------------\n");
-				break;
-			case 5:
 				delete_linked_vlan_list(vlan_stack);
 				break;
 			default:
-				print_wrong_input_data_mssg();
+				print_wrong_input_data_msg();
 			}
 		}
 		else
 		{
 			//this will take the remaining character from buffer
 			while ((buffer_eater = getchar()) != '\n' || buffer_eater != EOF);		
-			print_wrong_input_data_mssg();
+			print_wrong_input_data_msg();
 		}
 	}
 	return 0;

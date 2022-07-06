@@ -11,6 +11,7 @@ struct linked_vlan_list
 	unsigned short int vlan_id;
 	char tpid[TPID_MAX_LENGHT];
 	struct linked_vlan_list* next;
+   struct linked_vlan_list* before;
 };
 
 const char allowable_tpid_values[NUMBER_OF_TPID_VALUES][TPID_MAX_LENGHT] = {

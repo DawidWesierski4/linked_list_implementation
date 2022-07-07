@@ -65,7 +65,9 @@ bool check_is_data_correct(struct linked_vlan_list tested_value)
       return false;
 
    //iterating and checking our tpid is in the allowable tpid values 
-   for (int i = 0; i < NUMBER_OF_TPID_VALUES; i++)
+   int i;
+
+   for (i = 0; i < NUMBER_OF_TPID_VALUES; i++)
    {
       if (!strcmp(tested_value.tpid, allowable_tpid_values[i]))
       {
@@ -241,7 +243,10 @@ void delete_linked_vlan_list(struct linked_vlan_list* stack)
 
 int main(void)
 {
-	struct linked_vlan_list* vlan_stack, *vlan_stack_root;
+	struct linked_vlan_list *vlan_stack;
+
+   //the first value dosn't contain enything other than before->null
+	struct linked_vlan_list *vlan_stack_root; 
 
 	vlan_stack = NULL;
 	char buffer_eater; //this value is added to deal with c buffer 

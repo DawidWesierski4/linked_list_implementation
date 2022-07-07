@@ -61,20 +61,19 @@ void print_help(void)
 //for linked_vlan_list its 0<vlan_id<4096 tpid from allowable_tpid array
 bool check_is_data_correct(struct linked_vlan_list tested_value)
 {
-	if (tested_value.vlan_id >= 0 &&
-		tested_value.vlan_id <= 4096)
-	{
-		//iterating and checking our tpid is in the allowable tpid values 
-		for (int i = 0; i < NUMBER_OF_TPID_VALUES; i++)
-		{
-			if (!strcmp(tested_value.tpid, allowable_tpid_values[i]))
-			{
-				printf("---DATA VALIDATION SUCCESSFUL---\n");
-				return 0;
-			}
-		}
-	}
-	return 1;
+   if (tested_value.vlan_id < 0 || tested_value.vlan_id > 4096)
+      return false;
+
+   //iterating and checking our tpid is in the allowable tpid values 
+   for (int i = 0; i < NUMBER_OF_TPID_VALUES; i++)
+   {
+      if (!strcmp(tested_value.tpid, allowable_tpid_values[i]))
+      {
+         printf("---DATA VALIDATION SUCCESSFUL---\n");
+         return true;
+      }
+   }
+   return false;
 }
 
 
@@ -82,6 +81,7 @@ bool check_is_data_correct(struct linked_vlan_list tested_value)
 bool add_value_linked_vlan_list(struct linked_vlan_list** stack) 
 {
 	struct linked_vlan_list* auxiliary;
+
    auxiliary = (struct linked_vlan_list*)malloc(sizeof(struct linked_vlan_list));
 	printf("---ADDING VALUES---\n");
 	if (auxiliary!=NULL)
@@ -90,45 +90,24 @@ bool add_value_linked_vlan_list(struct linked_vlan_list** stack)
 		scanf("%hu", &auxiliary->vlan_id);
 		printf("2 - input tpid\n");
 		scanf("%s", auxiliary->tpid);
-		if (!check_is_data_correct(*auxiliary))
+		if (check_is_data_correct(*auxiliary))
 		{
-			auxiliary->next = (*stack);
+			auxiliary->before = (*stack);
+         auxiliary->next = NULL;
+         (*stack)->next = auxiliary;
 			(*stack) = auxiliary;
 			return true; //means terminate without errors
 		}
 	}
 	else
-		printf("---ERROR DURING ALLOCATION OF THE MEMORY FOR THE NEW VALUE---\n");
+   {
+		printf("---ERROR UNABLE TO ALLOCATE THE MEMORY FOR THE NEW VALUE---\n");
+      free(auxiliary);
+   }
 	while (getchar() != '\n'); //clear buffer in case excesive input data 
 	print_wrong_input_data_msg();
 	return false;
 }
-
-
-//option 1
-bool init_linked_vlan_list(struct linked_vlan_list** stack)
-{
-	*stack = (struct linked_vlan_list*)malloc(sizeof(struct linked_vlan_list));
-	printf("---ADDING VALUES---\n");
-	if (*stack != NULL)
-	{
-		printf("1 - input Vlan ID\n");
-		scanf("%hu", &(*stack)->vlan_id);
-		printf("2 - input tpid\n");
-		scanf("%s", (*stack)->tpid);
-		(*stack)->next = NULL;
-		if (!check_is_data_correct(*(*stack)))
-			return true; 
-	}
-	else
-		printf("---ERROR DURING INITIALIZATION---\n"
-      "---ALLOCATION OF THE MEMORY FAILED---\n");
-	while (getchar() != '\n'); //clear buffer in case excesive input data 
-	*stack = NULL;
-	print_wrong_input_data_msg();
-	return false;
-}
-
 
 //option 2
 bool delete_value_linked_vlan_list(struct linked_vlan_list** stack)
@@ -162,7 +141,7 @@ bool print_values_linked_vlan_list(struct linked_vlan_list* stack)
 		return false;
 	else
 	{
-		printf("-----------------PRINTING-VALUES---------------\n");
+		printf("---PRINTING VALUES---\n");
 		while (stack->next != NULL) //do while basicly 
 		{
 			printf("value %3hu\n", counter++);
@@ -178,6 +157,7 @@ bool print_values_linked_vlan_list(struct linked_vlan_list* stack)
 	}
 }
 
+/* THIS IS OPTIONAL SORT ALGORITHM 
 
 //returns true when vlan 1 > vlan 2 (they are compared based on ID if the ID 
 //are the same they are compared based on the tpid)
@@ -201,7 +181,7 @@ short int compare_vlan(struct linked_vlan_list vlan1,
 }
 
 
-/* THIS IS OPTIONAL SORT ALGORITHM 
+
 
 void swap_vlan(struct linked_vlan_list* vlan1, struct linked_vlan_list* vlan2)
 {
@@ -254,18 +234,22 @@ void delete_linked_vlan_list(struct linked_vlan_list* stack)
 			free(auxiliary);
 		}
 		free(stack);
-		printf("--------------MEMORY-CLEASENED------------\n");
+		printf("---MEMORY CLEASENED---\n");
 	}
 }
 
 
 int main(void)
 {
-	struct linked_vlan_list* vlan_stack;
+	struct linked_vlan_list* vlan_stack, *vlan_stack_root;
+
 	vlan_stack = NULL;
 	char buffer_eater; //this value is added to deal with c buffer 
+
 	unsigned int number_of_nodes = 0;
+
 	unsigned short int choice = 0;
+
 	while (choice != 4)
 	{
 		print_menu();
@@ -278,19 +262,16 @@ int main(void)
 				break;
 			case 1:
 				if (vlan_stack == NULL)
-				{
-					if (!init_linked_vlan_list(&vlan_stack))
-						printf("---INITIALIZATION FAILED---\n");
-					else
-						number_of_nodes = 1;
-				}
-				else
-				{
-					if (!add_value_linked_vlan_list(&vlan_stack))
-						printf("---ADDING FAILED---\n");
-					else
-						number_of_nodes++;
-				}
+               {
+				   vlan_stack = (struct linked_vlan_list*)malloc(sizeof(struct linked_vlan_list));
+               vlan_stack->before = NULL;
+               vlan_stack->next = NULL;
+               vlan_stack_root = vlan_stack;
+               }
+            if (vlan_stack != NULL &&!add_value_linked_vlan_list(&vlan_stack))
+               printf("---ADDING FAILED---\n");
+            else
+               number_of_nodes++;
 				break;
 			case 2:
 				if (!delete_value_linked_vlan_list(&vlan_stack))
@@ -299,7 +280,7 @@ int main(void)
 					number_of_nodes--;
 				break;
 			case 3:
-				if (!print_values_linked_vlan_list(vlan_stack))
+				if (!print_values_linked_vlan_list(vlan_stack_root->next))
 					printf("---NO VALUES TO PRINT---\n");
 				break;
 			case 4:

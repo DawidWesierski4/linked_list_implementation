@@ -11,8 +11,8 @@
 * 
 * Description:
 * this program shows the implementation of the linked list concept it works 
-* similar to stack the memory is dynamicly allocated so but you can only get out
-* one value  from the TOP of the stack 
+* similar to list the memory is dynamicly allocated so but you can only get out
+* one value  from the TOP of the list 
 *	
 * 
 *=============================================================================*/
@@ -80,7 +80,7 @@ bool check_is_data_correct(struct linked_vlan_list tested_value)
 
 
 //option 1
-bool add_value_linked_vlan_list(struct linked_vlan_list** stack) 
+bool add_value_linked_vlan_list(struct linked_vlan_list **list) 
 {
 	struct linked_vlan_list* auxiliary;
    auxiliary = (struct linked_vlan_list*)malloc(sizeof(struct linked_vlan_list));
@@ -93,13 +93,13 @@ bool add_value_linked_vlan_list(struct linked_vlan_list** stack)
 		scanf("%s", auxiliary->tpid);
 		if (check_is_data_correct(*auxiliary))
 		{
-			auxiliary->before = (*stack);
+			auxiliary->before = (*list);
          auxiliary->next = NULL;
-         if(*stack != NULL)
+         if(*list != NULL)
          {
-            (*stack)->next = auxiliary;
+            (*list)->next = auxiliary;
          }
-         (*stack) = auxiliary;
+         (*list) = auxiliary;
 			return true; //means terminate without errors
 		}
 	}
@@ -115,22 +115,22 @@ bool add_value_linked_vlan_list(struct linked_vlan_list** stack)
 
 
 //option 3
-void print_values_linked_vlan_list(struct linked_vlan_list* stack)
+void print_values_linked_vlan_list(struct linked_vlan_list* list)
 {
 	unsigned short counter = 1;
-	if (stack != NULL)
+	if (list != NULL)
    {
    printf("---PRINTING VALUES---\n");
-   while (stack->next != NULL) //do while basicly 
+   while (list->next != NULL) //do while basicly 
    {
       printf("value %3hu\n", counter++);
-      printf("%10s %3hu\n", "vlan id", stack->vlan_id);
-      printf("%10s %3s\n", "tpid", stack->tpid);
-      stack = stack->next;
+      printf("%10s %3hu\n", "vlan id", list->vlan_id);
+      printf("%10s %3s\n", "tpid", list->tpid);
+      list = list->next;
    }
    printf("value %3hu\n", counter++);
-   printf("%10s %3hu\n", "vlan id", stack->vlan_id);
-   printf("%10s %3s\n", "tpid", stack->tpid);
+   printf("%10s %3hu\n", "vlan id", list->vlan_id);
+   printf("%10s %3s\n", "tpid", list->tpid);
    printf("\n");
    }
    else
@@ -141,18 +141,18 @@ void print_values_linked_vlan_list(struct linked_vlan_list* stack)
 
 //option 2
 bool delete_value_linked_vlan_list(
-   struct linked_vlan_list** stack_root,
-   struct linked_vlan_list** stack_leaf,
+   struct linked_vlan_list** list_root,
+   struct linked_vlan_list** list_leaf,
    int size)
 
 {
-   struct linked_vlan_list* stack = *stack_root;
+   struct linked_vlan_list* list = *list_root;
    
-   if (stack != NULL && size > 0)
+   if (list != NULL && size > 0)
    {
       printf("---DELETING VALUES---\n"
       "which value do you want to delete ?\n\n");
-      print_values_linked_vlan_list(stack);
+      print_values_linked_vlan_list(list);
       printf("input the value number of the deleted value \n\n");
       unsigned int index_to_delete;
 
@@ -162,8 +162,8 @@ bool delete_value_linked_vlan_list(
       {
          //here we are moving our auxiliary pointer to the number of the value 
          //we want to delete 
-         for(i=1;(i<index_to_delete && stack && index_to_delete < size);i++)
-            stack=stack->next;
+         for(i=1;(i<index_to_delete && list && index_to_delete < size);i++)
+            list=list->next;
 
       }
       else
@@ -196,29 +196,29 @@ bool delete_value_linked_vlan_list(
 
       if(size>1)
       {
-         if(stack->before!=NULL)
-            stack->before->next = stack->next; 
+         if(list->before!=NULL)
+            list->before->next = list->next; 
          else
          {
-            stack->next->before = NULL;
-            (*stack_root) = stack->next;
+            list->next->before = NULL;
+            (*list_root) = list->next;
          }
 
-         if(stack->next!=NULL)
-            stack->next->before = stack->before;
+         if(list->next!=NULL)
+            list->next->before = list->before;
          else
          {
-            stack->before->next = NULL;
-            (*stack_leaf) = stack->before;
+            list->before->next = NULL;
+            (*list_leaf) = list->before;
          }
       }
       else
       {
-         *stack_root = NULL;
-         *stack_leaf = NULL;
+         *list_root = NULL;
+         *list_leaf = NULL;
       }
 
-      free(stack);
+      free(list);
       printf("---VALUE DELETED---\n");
       return true;
    }
@@ -230,17 +230,17 @@ bool delete_value_linked_vlan_list(
 
 
 //option 4
-void delete_linked_vlan_list(struct linked_vlan_list* stack)
+void delete_linked_vlan_list(struct linked_vlan_list* list)
 {
-	if (stack != NULL)
+	if (list != NULL)
 	{
-		while(stack->next != NULL)
+		while(list->next != NULL)
 		{
-			struct linked_vlan_list* auxiliary = stack;
-			stack = stack->next;
+			struct linked_vlan_list* auxiliary = list;
+			list = list->next;
 			free(auxiliary);
 		}
-		free(stack);
+		free(list);
 		printf("---MEMORY CLEASENED---\n");
 	}
 }
@@ -248,13 +248,13 @@ void delete_linked_vlan_list(struct linked_vlan_list* stack)
 
 int main(void)
 {
-	struct linked_vlan_list *vlan_stack;
+	struct linked_vlan_list *vlan_list;
 
    //the first value dosn't contain enything other than before->null
-	struct linked_vlan_list *vlan_stack_root; 
+	struct linked_vlan_list *vlan_list_root; 
 
-	vlan_stack_root = NULL;
-	vlan_stack = NULL;
+	vlan_list_root = NULL;
+	vlan_list = NULL;
 
 	char buffer_eater; //this value is added to deal with c buffer 
 
@@ -273,26 +273,26 @@ int main(void)
 				print_help();
 				break;
 			case 1:
-            if (!add_value_linked_vlan_list(&vlan_stack))
+            if (!add_value_linked_vlan_list(&vlan_list))
                printf("---ADDING FAILED---\n");
             else
             {
                number_of_nodes++;
-               if (vlan_stack_root == NULL)
-                  vlan_stack_root = vlan_stack; // setting the root
+               if (vlan_list_root == NULL)
+                  vlan_list_root = vlan_list; // setting the root
             }
 				break;
 			case 2:
-				if (!delete_value_linked_vlan_list(&vlan_stack_root,&vlan_stack, number_of_nodes))
+				if (!delete_value_linked_vlan_list(&vlan_list_root,&vlan_list, number_of_nodes))
 					printf("---NO VALUES TO DELETE---\n");
 				else
 					number_of_nodes--;
 				break;
 			case 3:
-				print_values_linked_vlan_list(vlan_stack_root);
+				print_values_linked_vlan_list(vlan_list_root);
 				break;
 			case 4:
-				delete_linked_vlan_list(vlan_stack_root);
+				delete_linked_vlan_list(vlan_list_root);
 				break;
 			default:
 				print_wrong_input_data_msg();

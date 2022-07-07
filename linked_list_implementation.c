@@ -82,7 +82,7 @@ bool check_is_data_correct(struct linked_vlan_list tested_value)
 //option 1
 bool add_value_linked_vlan_list(struct linked_vlan_list **list) 
 {
-	struct linked_vlan_list* auxiliary;
+	struct linked_vlan_list *auxiliary;
    auxiliary = (struct linked_vlan_list*)malloc(sizeof(struct linked_vlan_list));
 	printf("---ADDING VALUES---\n");
 	if (auxiliary!=NULL)
@@ -141,8 +141,8 @@ void print_values_linked_vlan_list(struct linked_vlan_list* list)
 
 //option 2
 bool delete_value_linked_vlan_list(
-   struct linked_vlan_list** list_root,
-   struct linked_vlan_list** list_leaf,
+   struct linked_vlan_list **list_root,
+   struct linked_vlan_list **list_leaf,
    int size)
 
 {
@@ -194,9 +194,9 @@ bool delete_value_linked_vlan_list(
       *     next     ->node2
       */
 
-      if(size>1)
+      if(size > 1)
       {
-         if(list->before!=NULL)
+         if(list->before != NULL)
             list->before->next = list->next; 
          else
          {
@@ -204,7 +204,7 @@ bool delete_value_linked_vlan_list(
             (*list_root) = list->next;
          }
 
-         if(list->next!=NULL)
+         if(list->next != NULL)
             list->next->before = list->before;
          else
          {
@@ -230,7 +230,7 @@ bool delete_value_linked_vlan_list(
 
 
 //option 4
-void delete_linked_vlan_list(struct linked_vlan_list* list)
+void delete_linked_vlan_list(struct linked_vlan_list *list)
 {
 	if (list != NULL)
 	{

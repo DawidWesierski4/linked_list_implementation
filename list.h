@@ -1,22 +1,8 @@
-/*==============================================================================
-* Title: Linked list implementation concept 
-*
-* Author: Dawid Wesierski
-* Language: C
-* To Compile: gcc 11.2.0
-* Version: 0.1.0.0
-* Date: 08.07.2022
-*
-* ------------------------------------------------------------------------------
-* 
-* Description:
-* this program shows the implementation of the linked list concept it works 
-* similary to list the memory is dynamicly allocated you can print the value
-*     
-* 
-*=============================================================================*/
-#include "header.h"
-
+void print_wrong_input_data_msg(void)
+{
+     printf("---WRONG INPUT DATA TRY AGAIN---\n");
+     printf("\n");
+}
 
 //for linked_vlan_list its 0<vlan_id<4096 tpid from allowable_tpid array
 bool check_is_data_correct(struct linked_vlan_list tested_value)
@@ -56,15 +42,23 @@ bool add_value_linked_vlan_list(struct linked_vlan_list **list)
         if (check_is_data_correct(*auxiliary))
         {
             auxiliary->before = (*list);
-            if((*list)->next == NULL)
-                auxiliary->next = NULL;
-            else
-                auxiliary->next = (*list)->next;
+
             if(*list != NULL)
             {
+                if((*list)->next == NULL)
+                {
+                    printf("log 03\n");
+                    auxiliary->next = NULL;
+                }
+                else
+                {
+                    printf("log 04\n");
+                    auxiliary->next = (*list)->next;
+                }
                 (*list)->next = auxiliary;
             }
             (*list) = auxiliary;
+
             return true; //means terminate without errors
         }
     }
@@ -94,6 +88,9 @@ void print_values_linked_vlan_list(struct linked_vlan_list* list)
             printf("%10s %3s\n", "tpid", list->tpid);
             list = list->next;
         } while (list->next != NULL);
+        printf("value %3hu\n", counter++);
+        printf("%10s %3hu\n", "vlan id", list->vlan_id);
+        printf("%10s %3s\n", "tpid", list->tpid);
         printf("\n");
     }
     else
@@ -114,6 +111,9 @@ int count_and_print_values_linked_vlan_list(struct linked_vlan_list* list)
             printf("%10s %3s\n", "tpid", list->tpid);
             list = list->next;
         }while (list->next != NULL);
+            printf("value %3hu\n", ++counter);
+            printf("%10s %3hu\n", "vlan id", list->vlan_id);
+            printf("%10s %3s\n", "tpid", list->tpid);
     }
     else
         printf("---NO VALUES TO PRINT---\n");
@@ -134,6 +134,7 @@ bool delete_value_linked_vlan_list(
         printf("---DELETING VALUES---\n"
         "which value do you want to delete ?\n\n");
         size = count_and_print_values_linked_vlan_list(list);
+        printf("log 1 size = %d\n",size);
         printf("input the value number of the deleted value \n\n");
         unsigned int index_to_delete;
 
@@ -149,7 +150,6 @@ bool delete_value_linked_vlan_list(
         }
         else
             return false;
-
         /*
         *  we are doing something like this 
         *  

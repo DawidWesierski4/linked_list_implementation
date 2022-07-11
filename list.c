@@ -19,19 +19,13 @@
 #include "list.h"
 
 
-void print_wrong_input_data_msg(void)
-{
-     printf("---WRONG INPUT DATA TRY AGAIN---\n");
-     printf("\n");
-}
-
 
 void print_menu(void)
 {
     printf("\n"
     "---INPUT OPTION YOU WANT TO EXECUTE---\n"
     "0 - Help\n"
-    "1 - Add value to the array \n"
+    "1 - Add value to theg array \n"
     "2 - Delete value from the array \n"
     "3 - Display values from the array \n"
     "4 - Delete the whole array, release the memory and exit the program\n\n");

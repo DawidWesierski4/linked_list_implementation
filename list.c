@@ -15,9 +15,7 @@
 *     
 * 
 *=============================================================================*/
-#include "header.h"
 #include "list.h"
-
 
 
 void print_menu(void)
@@ -34,10 +32,10 @@ void print_menu(void)
 
 void print_help(void) 
 {
-     printf("---DESCRIPTION OF THE OPTIONS--- \n"
+    printf("---DESCRIPTION OF THE OPTIONS--- \n"
     "1 - Add value to the array \n"
     "This option makes you input 2 values - Vlan id and tpid (tpid should be \n"
-    "one of the 3 allovable Tpid values - \"0x8100\", \"0x9100\", \"0x88a8\")\n"
+    "one of the 3 allowable Tpid values - \"0x8100\", \"0x9100\", \"0x88a8\")\n"
     "\n"
     "2 - Delete Value from the array \n"
     "This option lets you delete value from the array. \n"
@@ -51,64 +49,171 @@ void print_help(void)
 }
 
 
-int main(void)
+void print_values_linked_vlan_list(struct linked_vlan_list* list)
 {
-     struct linked_vlan_list *vlan_list;
+    if (list == NULL)
+    {
+        printf("---NO VALUES TO PRINT---\n");
+        return;
+    }
 
-    //the first value dosn't contain enything other than before->null
-     struct linked_vlan_list *vlan_list_root; 
+    printf("---PRINTING VALUES---\n");
+    do
+    {
+        printf("\n%10s %3hu\n", "vlan id", list->vlan_id);
+        printf("%10s %3s\n", "tpid", list->tpid);
+        list = list->next;
+    } while (list != NULL);
+}
 
-     vlan_list_root = NULL;
-     vlan_list = NULL;
 
-     char buffer_eater; //this value is added to deal with c buffer 
+bool delete_value_linked_vlan_list(struct linked_vlan_list **list_root,
+                                    struct linked_vlan_list **list_leaf)
+{
+    if (*list_root == NULL)
+    {
+        printf("---LIST IS EMPTY---\n");
+        return false;
+    }
 
-     unsigned int number_of_nodes = 0;
+    struct linked_vlan_list *list = *list_root;
+    int id_to_delete;
+    int i;
 
-     unsigned short int choice = 0;
+    printf("---DELETING VALUES---\n"
+    "which value do you want to delete ?\n\n");
+    print_values_linked_vlan_list(list);
+    printf("Value: ");
+    scanf("%u\n",&id_to_delete);
 
-     while(choice != 4)
-     {
-        print_menu();
-        if (scanf("%hu", &choice))
+    if (id_to_delete < 0 || id_to_delete > 4096)
+    {
+        printf("---ERROR INDEX EXCEEDS ALLOWABLE VALUES---\n\n");
+        return false;
+    }
+
+    while (list != NULL)
+    {
+        if (*list_root == NULL)
+            *list_root = list;
+
+        if (*list_leaf == NULL)
+            *list_leaf = list;
+
+        if ((list)->vlan_id != id_to_delete)
         {
-            switch (choice)
-            {
-            case 0:
-                print_help();
-                break;
-            case 1:
-                if (!add_value_linked_vlan_list(&vlan_list))
-                    printf("---ADDING FAILED---\n");
-            else
-            {
-                if (vlan_list_root == NULL)
-                    vlan_list_root = vlan_list; // setting the root
-            }
-                    break;
-            case 2:
-                if (!delete_value_linked_vlan_list(&vlan_list_root,&vlan_list))
-                    printf("---NO VALUES TO DELETE---\n");
-                else
-                    number_of_nodes--;
-                break;
-            case 3:
-                print_values_linked_vlan_list(vlan_list_root);
-                break;
-            case 4:
-                delete_linked_vlan_list(vlan_list_root);
-                break;
-            default:
-                print_wrong_input_data_msg();
-            }
+            (list) = (list)->next;
+            continue;
         }
-          else
+
+        if (!vlan_delete_value_linked_vlan_list(&list))
         {
-            //this will take the remaining character from buffer
-            while ((buffer_eater = getchar()) != '\n' ||
-                buffer_eater != EOF);
-            print_wrong_input_data_msg();
+            printf("---FAILED TO DELETE THE VALUE---");
+            return false;
         }
     }
+
+    printf("---VALUES DELETED---\n");
+    return true;
+
+}
+
+
+bool add_value_linked_vlan_list(struct linked_vlan_list **list)
+{
+    short unsigned int value_vlan_id;
+    char tpid[TPID_MAX_LENGHT];
+    struct linked_vlan_list *aux;
+    char buffer_eater;
+
+    printf("---ADDING VALUES---\n");
+    printf("1 - input Vlan ID\n");
+    scanf("%hu", &value_vlan_id);
+    printf("2 - input tpid\n");
+    scanf("%s", tpid);
+
+    if (!list_check_is_data_correct(value_vlan_id,tpid))
+    {
+        printf("\n---ERROR INCORECT ID OR VLAN VALUE---\n");
+        while ((buffer_eater = getchar()) != '\n' || buffer_eater != EOF);
+        return false;
+    }
+
+    if(!vlan_add_value_linked_vlan_list(list,value_vlan_id,tpid))
+    {
+        printf("\n---ERROR ADDING THE VALUE FAILED---\n");
+        return false;
+    }
+
+    printf("---VALUE ADDED---\n\n");
+    return true; //means terminate without errors
+}
+
+
+bool function_choice(unsigned short int choice,
+                    struct linked_vlan_list** vlan_list,
+                    struct linked_vlan_list** vlan_list_root)
+{
+    switch (choice)
+    {
+        case 0:
+            print_help();
+            break;
+        case 1:
+            if (!add_value_linked_vlan_list(vlan_list))
+                printf("---ADDING FAILED---\n");
+            else
+            {
+                if (*vlan_list_root == NULL) 
+                    *vlan_list_root = *vlan_list; // setting the root
+            }
+            break;
+        case 2:
+            if (!delete_value_linked_vlan_list(vlan_list_root, vlan_list))
+                printf("---DELETING FAILED---\n");
+            break;
+        case 3:
+            print_values_linked_vlan_list(*vlan_list_root);
+            break;
+        case 4:
+            delete_linked_vlan_list(*vlan_list_root);
+            break;
+        case 5:
+            return false; //exiting
+        default:
+            printf("---ERROR WRONG INPUT OPTION TRY AGAIN---\n");
+    }
+    return true;
+}
+
+
+int main(void)
+{
+    struct linked_vlan_list *vlan_list;
+    struct linked_vlan_list *vlan_list_root;
+    unsigned short int choice;
+    char buffer_eater; //this value is added to deal with c buffer
+
+    vlan_list_root = NULL;
+    vlan_list = NULL;
+    choice = 0;
+
+    while (true)
+    {
+        print_menu();
+        if (!scanf("%hu", &choice))
+        {
+            printf("---ERROR WHILE READING THE INPUT OPTION TRY AGAIN---\n\n");
+            while ((buffer_eater = getchar()) != '\n' || buffer_eater != EOF);
+        }
+
+        if(!function_choice(choice, &vlan_list, &vlan_list_root))
+        {
+            delete_linked_vlan_list(vlan_list_root);
+            printf("\n---EXITING---\n");
+            break;
+        }
+    }
+
     return 0;
 }

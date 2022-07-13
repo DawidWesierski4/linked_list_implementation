@@ -1,227 +1,130 @@
-void print_wrong_input_data_msg(void)
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+
+#define NUMBER_OF_TPID_VALUES 3
+#define TPID_MAX_LENGHT 7
+
+struct linked_vlan_list
 {
-     printf("---WRONG INPUT DATA TRY AGAIN---\n");
-     printf("\n");
-}
+    struct linked_vlan_list* next;
+    struct linked_vlan_list* before;
+    char tpid[TPID_MAX_LENGHT];
+    unsigned short int vlan_id;
+};
+
+const char allowable_tpid_values[NUMBER_OF_TPID_VALUES][TPID_MAX_LENGHT] = {
+    "0x8100", "0x9100", "0x88a8"
+};
+
 
 //for linked_vlan_list its 0<vlan_id<4096 tpid from allowable_tpid array
-bool check_is_data_correct(struct linked_vlan_list tested_value)
+bool list_check_is_data_correct(int value_vlan_id, char* tpid)
 {
-    if (tested_value.vlan_id < 0 || tested_value.vlan_id > 4096)
+    int i;
+
+    if (value_vlan_id < 0 || value_vlan_id > 4096)
         return false;
 
     //iterating and checking our tpid is in the allowable tpid values 
-    int i;
-
     for (i = 0; i < NUMBER_OF_TPID_VALUES; i++)
     {
-        if (!strcmp(tested_value.tpid, allowable_tpid_values[i]))
-        {
-            printf("---DATA VALIDATION SUCCESSFUL---\n");
+        if (!strcmp(tpid, allowable_tpid_values[i]))
             return true;
-        }
     }
     return false;
 }
 
 
-bool add_value_linked_vlan_list(struct linked_vlan_list **list) 
+//this moves the pointer to the end of the list
+struct linked_vlan_list* vlan_last_list_element (struct linked_vlan_list *list)
 {
-     struct linked_vlan_list *auxiliary;
-    
+    if (!list)
+        return NULL;
+
+    while (list->next)
+        list = list->next;
+
+    return list;
+}
+
+//adds the value AFTER the pointed value changes the pointer to the pointer to
+//the new value 
+bool vlan_add_value_linked_vlan_list(struct linked_vlan_list **list,
+                                    int value_vlan_id, char *tpid) 
+{
+    struct linked_vlan_list *auxiliary;
+
     auxiliary = 
-        (struct linked_vlan_list*)malloc(sizeof(struct linked_vlan_list));
-    
-     printf("---ADDING VALUES---\n");
-    if (auxiliary!=NULL)
+        (struct linked_vlan_list*) malloc(sizeof(struct linked_vlan_list));
+
+    if(!auxiliary)
     {
-        printf("1 - input Vlan ID\n");
-        scanf("%hu", &auxiliary->vlan_id);
-        printf("2 - input tpid\n");
-        scanf("%s", auxiliary->tpid);
-        if (check_is_data_correct(*auxiliary))
-        {
-            auxiliary->before = (*list);
-
-            if(*list != NULL)
-            {
-                if((*list)->next == NULL)
-                {
-                    printf("log 03\n");
-                    auxiliary->next = NULL;
-                }
-                else
-                {
-                    printf("log 04\n");
-                    auxiliary->next = (*list)->next;
-                }
-                (*list)->next = auxiliary;
-            }
-            (*list) = auxiliary;
-
-            return true; //means terminate without errors
-        }
-    }
-
-    else
-    {
-        printf("---ERROR UNABLE TO ALLOCATE THE"
-        " MEMORY FOR THE NEW VALUE---\n");
-        free(auxiliary);
-    }
-    while (getchar() != '\n'); //clear buffer in case excesive input data 
-    print_wrong_input_data_msg();
-    return false;
-}
-
-
-void print_values_linked_vlan_list(struct linked_vlan_list* list)
-{
-    unsigned short counter = 1;
-    if (list != NULL)
-    {
-        printf("---PRINTING VALUES---\n");
-        do
-        {
-            printf("value %3hu\n", counter++);
-            printf("%10s %3hu\n", "vlan id", list->vlan_id);
-            printf("%10s %3s\n", "tpid", list->tpid);
-            list = list->next;
-        } while (list->next != NULL);
-        printf("value %3hu\n", counter++);
-        printf("%10s %3hu\n", "vlan id", list->vlan_id);
-        printf("%10s %3s\n", "tpid", list->tpid);
-        printf("\n");
-    }
-    else
-        printf("---NO VALUES TO PRINT---\n");
-    
-}
-
-
-int count_and_print_values_linked_vlan_list(struct linked_vlan_list* list)
-{
-    unsigned short counter = 0;
-    if (list != NULL)
-    {
-        do
-        {
-            printf("value %3hu\n", ++counter);
-            printf("%10s %3hu\n", "vlan id", list->vlan_id);
-            printf("%10s %3s\n", "tpid", list->tpid);
-            list = list->next;
-        }while (list->next != NULL);
-            printf("value %3hu\n", ++counter);
-            printf("%10s %3hu\n", "vlan id", list->vlan_id);
-            printf("%10s %3s\n", "tpid", list->tpid);
-    }
-    else
-        printf("---NO VALUES TO PRINT---\n");
-
-    return counter;
-}
-
-//option 2
-bool delete_value_linked_vlan_list(
-    struct linked_vlan_list **list_root,
-    struct linked_vlan_list **list_leaf)
-{
-    struct linked_vlan_list* list = *list_root;
-    int size = 0;
-
-    if (list != NULL)
-    {
-        printf("---DELETING VALUES---\n"
-        "which value do you want to delete ?\n\n");
-        size = count_and_print_values_linked_vlan_list(list);
-        printf("log 1 size = %d\n",size);
-        printf("input the value number of the deleted value \n\n");
-        unsigned int index_to_delete;
-
-        scanf("%u",&index_to_delete);
-        int i;
-        if(index_to_delete>0)
-        {
-            //here we are moving our auxiliary pointer to the number of the  
-            //value we want to delete 
-            for(i=1;(i<index_to_delete && list && index_to_delete < size);i++)
-                list=list->next;
-
-        }
-        else
-            return false;
-        /*
-        *  we are doing something like this 
-        *  
-        *  BEFORE
-        *  node1
-        *      before    -> node0
-        *      next      -> deletenode
-        *  deltednode
-        *      before    ->node1
-        *      next      ->node2
-        *  node2
-        *      before    ->deletenode
-        *      next      ->node2
-        * 
-        * AFTER
-        *  node1
-        *      before    -> node0
-        *      next      -> node2
-        *  deltednode
-        *      --MEMORY FREE
-        *  node2
-        *      before    ->node1
-        *      next      ->node2
-        */
-
-        if(size > 1)
-        {
-            if(list->before != NULL)
-                list->before->next = list->next; 
-            else
-            {
-                list->next->before = NULL;
-                (*list_root) = list->next;
-            }
-
-            if(list->next != NULL)
-                list->next->before = list->before;
-            else
-            {
-                list->before->next = NULL;
-                (*list_leaf) = list->before;
-            }
-        }
-        else
-        {
-            *list_root = NULL;
-            *list_leaf = NULL;
-        }
-
-        free(list);
-        printf("---VALUE DELETED---\n");
-        return true;
-    }
-    else
-    {
+        printf("---ERROR ALOCATION OF THE MEMORY FAILED---\n");
         return false;
     }
+
+    auxiliary->before = (*list);
+    strcpy(auxiliary->tpid,tpid);
+    auxiliary->vlan_id = value_vlan_id;
+
+    if(*list != NULL)
+    {
+        if((*list) -> next == NULL)
+            auxiliary->next = NULL;
+        else
+            auxiliary->next = (*list)->next;
+
+        auxiliary->before = (*list);
+
+        (*list)->next = auxiliary;
+    }
+
+    (*list) = auxiliary;
+    return true; //means terminate without errors
 }
 
 
+//option 2
+bool vlan_delete_value_linked_vlan_list(struct linked_vlan_list **list)
+{
+    if(*list == NULL)
+        return false;
+
+    if((*list)->before == NULL && (*list)->next == NULL)
+    {
+        free(*list);
+        *list = NULL;
+        return true;
+    }
+
+    if((*list)->before)
+        (*list)->before->next = (*list)->next;
+
+    if((*list)->next)
+        (*list)->next->before = (*list)->before;
+    
+    free(*list);
+    return true;
+}
+
+
+//frees the memory from the pointer to the end to the list
 void delete_linked_vlan_list(struct linked_vlan_list *list)
 {
-    if (list != NULL)
-    {
-        while(list->next != NULL)
-        {
-            struct linked_vlan_list* auxiliary = list;
-            list = list->next;
-            free(auxiliary);
-        }
+    if (list == NULL)
+        return;
 
-        free(list);
-        printf("---MEMORY CLEASENED---\n");
+    struct linked_vlan_list *auxiliary;
+
+    if(list->before)
+        list->before->next = NULL;
+
+    while (list != NULL)
+    {
+        auxiliary = list;
+        list = list->next;
+        free(auxiliary);
     }
 }

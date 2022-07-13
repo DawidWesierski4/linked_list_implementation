@@ -52,7 +52,7 @@ void print_help(void)
 }
 
 
-void print_values_linked_vlan_list(struct linked_vlan_list* list)
+void print_values_linked_vlan_list(struct linked_vlan_list *list)
 {
     if (list == NULL)
     {
@@ -102,7 +102,6 @@ bool delete_value_linked_vlan_list(struct linked_vlan_list **list_root,
         if (list->vlan_id != id_to_delete)
         {
             (list) = (list)->next;
-            value_found = true;
             continue;
         }
 
@@ -115,6 +114,7 @@ bool delete_value_linked_vlan_list(struct linked_vlan_list **list_root,
         aux = list->next;
         if (vlan_delete_value_linked_vlan_list(list))
         {
+            value_found = true;
             list = aux;
             continue;
         }
@@ -131,8 +131,16 @@ bool delete_value_linked_vlan_list(struct linked_vlan_list **list_root,
         return false;
     }
 
-    printf("---VALUES DELETED---\n");
-    return true;
+    if(value_found)
+    {
+        printf("---VALUES DELETED---\n");
+        return true;
+    }
+    else
+    {
+        printf("---VALUE WITH THIS ID NOT FOUND---\n");
+        return false;
+    }
 
 }
 
@@ -141,7 +149,6 @@ bool add_value_linked_vlan_list(struct linked_vlan_list **list)
 {
     short unsigned int value_vlan_id;
     char tpid[TPID_MAX_LENGHT];
-    struct linked_vlan_list *aux;
 
     printf("---ADDING VALUES---\n");
     printf("1 - input Vlan ID\n");
@@ -167,8 +174,8 @@ bool add_value_linked_vlan_list(struct linked_vlan_list **list)
 
 
 bool function_choice(unsigned short int choice,
-                    struct linked_vlan_list** vlan_list,
-                    struct linked_vlan_list** vlan_list_root)
+                    struct linked_vlan_list **vlan_list,
+                    struct linked_vlan_list **vlan_list_root)
 {
     switch (choice)
     {
@@ -193,8 +200,8 @@ bool function_choice(unsigned short int choice,
             break;
         case 4:
             vlan_delete_linked_vlan_list(*vlan_list_root);
-            vlan_list_root = NULL;
-            vlan_list = NULL;
+            *vlan_list_root = NULL;
+            *vlan_list = NULL;
             break;
         case 5:
             vlan_delete_linked_vlan_list(*vlan_list_root);

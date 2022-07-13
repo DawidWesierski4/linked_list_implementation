@@ -20,7 +20,7 @@ const char allowable_tpid_values[NUMBER_OF_TPID_VALUES][TPID_MAX_LENGHT] = {
 
 
 //for linked_vlan_list its 0<vlan_id<4096 tpid from allowable_tpid array
-bool list_check_is_data_correct(int value_vlan_id, char* tpid)
+bool list_check_is_data_correct(int value_vlan_id, char *tpid)
 {
     int i;
 
@@ -65,13 +65,14 @@ bool vlan_add_value_linked_vlan_list(struct linked_vlan_list **list,
         return false;
     }
 
-    auxiliary->before = (*list);
-    strcpy(auxiliary->tpid,tpid);
+    auxiliary->next = NULL;
+    auxiliary->before = NULL;
+    strcpy(auxiliary->tpid, tpid);
     auxiliary->vlan_id = value_vlan_id;
 
     if(*list != NULL)
     {
-        if((*list) -> next == NULL)
+        if((*list)->next == NULL)
             auxiliary->next = NULL;
         else
             auxiliary->next = (*list)->next;
@@ -117,7 +118,6 @@ bool vlan_delete_value_linked_vlan_list(struct linked_vlan_list *list)
 //frees the memory from the pointer to the end to the list
 void vlan_delete_linked_vlan_list(struct linked_vlan_list *list)
 {
-    printf("log 0 list->vlan_id %d", list->vlan_id);
     if (list == NULL)
         return;
 

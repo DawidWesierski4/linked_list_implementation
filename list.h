@@ -87,25 +87,31 @@ bool vlan_add_value_linked_vlan_list(struct linked_vlan_list **list,
 
 
 //option 2
-bool vlan_delete_value_linked_vlan_list(struct linked_vlan_list **list)
+bool vlan_delete_value_linked_vlan_list(struct linked_vlan_list *list)
 {
-    if(*list == NULL)
+    printf("log 1 delet\n");
+    if(list == NULL)
         return false;
 
-    if((*list)->before == NULL && (*list)->next == NULL)
+    //case when there is only one value in linked vlan list
+    if((list)->before == NULL && (list)->next == NULL)
     {
-        free(*list);
-        *list = NULL;
+        printf("log 2 delete \n");
+        free(list);
         return true;
     }
 
-    if((*list)->before)
-        (*list)->before->next = (*list)->next;
+    if((list)->before)
+        (list)->before->next = (list)->next;
+    else
+        (list)->next->before = NULL;
 
-    if((*list)->next)
-        (*list)->next->before = (*list)->before;
-    
-    free(*list);
+    if((list)->next)
+        (list)->next->before = (list)->before;
+    else
+        (list)->before->next = NULL;
+
+    free(list);
     return true;
 }
 

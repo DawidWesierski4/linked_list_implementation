@@ -77,14 +77,16 @@ bool delete_value_linked_vlan_list(struct linked_vlan_list **list_root,
     }
 
     struct linked_vlan_list *list = *list_root;
+    struct linked_vlan_list *aux;
     int id_to_delete;
-    int i;
+    bool value_found = false;
 
     printf("---DELETING VALUES---\n"
     "which value do you want to delete ?\n\n");
     print_values_linked_vlan_list(list);
-    printf("Value: ");
-    scanf("%u\n",&id_to_delete);
+    printf("\nValue: ");
+    scanf("%u",&id_to_delete);
+    printf("\n");
 
     if (id_to_delete < 0 || id_to_delete > 4096)
     {
@@ -94,23 +96,34 @@ bool delete_value_linked_vlan_list(struct linked_vlan_list **list_root,
 
     while (list != NULL)
     {
-        if (*list_root == NULL)
-            *list_root = list;
-
-        if (*list_leaf == NULL)
-            *list_leaf = list;
-
-        if ((list)->vlan_id != id_to_delete)
+        if (list->vlan_id != id_to_delete)
         {
             (list) = (list)->next;
+            value_found = true;
             continue;
         }
 
-        if (!vlan_delete_value_linked_vlan_list(&list))
+        if(list->before == NULL)
+            *list_root = list->next;
+
+        if(list->next == NULL)
+            *list_leaf = list->before;
+
+        aux = list->next;
+        if (!vlan_delete_value_linked_vlan_list(list))
         {
+            //if the value of the root was changed and deleting the first value
+            //failed then we need to move the root back
+            if(!(*list_root)->before)
+                (*list_root)=(*list_root)->before;
+        
+            if(!(*list_leaf)->next)
+                (*list_leaf) = (*list_leaf)->next;
+
             printf("---FAILED TO DELETE THE VALUE---");
             return false;
         }
+        list = aux;
     }
 
     printf("---VALUES DELETED---\n");
@@ -124,7 +137,6 @@ bool add_value_linked_vlan_list(struct linked_vlan_list **list)
     short unsigned int value_vlan_id;
     char tpid[TPID_MAX_LENGHT];
     struct linked_vlan_list *aux;
-    char buffer_eater;
 
     printf("---ADDING VALUES---\n");
     printf("1 - input Vlan ID\n");
@@ -135,7 +147,6 @@ bool add_value_linked_vlan_list(struct linked_vlan_list **list)
     if (!list_check_is_data_correct(value_vlan_id,tpid))
     {
         printf("\n---ERROR INCORECT ID OR VLAN VALUE---\n");
-        while ((buffer_eater = getchar()) != '\n' || buffer_eater != EOF);
         return false;
     }
 
@@ -145,7 +156,7 @@ bool add_value_linked_vlan_list(struct linked_vlan_list **list)
         return false;
     }
 
-    printf("---VALUE ADDED---\n\n");
+    printf("---VALUE ADDED---\n");
     return true; //means terminate without errors
 }
 

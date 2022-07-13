@@ -156,7 +156,7 @@ bool add_value_linked_vlan_list(struct linked_vlan_list **list)
     printf("2 - input tpid\n");
     scanf("%s", tpid);
 
-    if (!list_check_is_data_correct(value_vlan_id,tpid))
+    if (!vlan_list_check_is_data_correct(value_vlan_id,tpid))
     {
         printf("\n---ERROR INCORECT ID OR VLAN VALUE---\n");
         return false;

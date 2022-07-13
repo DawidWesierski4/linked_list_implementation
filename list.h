@@ -20,14 +20,14 @@ const char allowable_tpid_values[NUMBER_OF_TPID_VALUES][TPID_MAX_LENGHT] = {
 
 
 //for linked_vlan_list its 0<vlan_id<4096 tpid from allowable_tpid array
-bool list_check_is_data_correct(int value_vlan_id, char *tpid)
+bool vlan_list_check_is_data_correct(int value_vlan_id, char *tpid)
 {
     int i;
 
     if (value_vlan_id < 0 || value_vlan_id > 4096)
         return false;
 
-    //iterating and checking our tpid is in the allowable tpid values 
+    //iterating and checking if our tpid is in the allowable tpid values 
     for (i = 0; i < NUMBER_OF_TPID_VALUES; i++)
     {
         if (!strcmp(tpid, allowable_tpid_values[i]))
@@ -49,6 +49,7 @@ struct linked_vlan_list* vlan_last_list_element (struct linked_vlan_list *list)
     return list;
 }
 
+
 //adds the value AFTER the pointed value changes the pointer to the pointer to
 //the new value 
 bool vlan_add_value_linked_vlan_list(struct linked_vlan_list **list,
@@ -60,10 +61,7 @@ bool vlan_add_value_linked_vlan_list(struct linked_vlan_list **list,
         (struct linked_vlan_list*) malloc(sizeof(struct linked_vlan_list));
 
     if(!auxiliary)
-    {
-        printf("---ERROR ALOCATION OF THE MEMORY FAILED---\n");
         return false;
-    }
 
     auxiliary->next = NULL;
     auxiliary->before = NULL;

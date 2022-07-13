@@ -23,11 +23,11 @@ void print_menu(void)
     printf("\n"
     "---INPUT OPTION YOU WANT TO EXECUTE---\n"
     "0 - Help\n"
-    "1 - Add value to theg array \n"
+    "1 - Add value to the array \n"
     "2 - Delete value from the array \n"
     "3 - Display values from the array \n"
     "4 - Delete the whole array\n"
-    "5 - Delete the whole array, release the memory and exit the program\n\n");
+    "5 - Exit the program\n\n");
 }
 
 
@@ -93,7 +93,7 @@ bool delete_value_linked_vlan_list(struct linked_vlan_list **list_root,
 
     if (id_to_delete < 0 || id_to_delete > 4096)
     {
-        printf("---ERROR INDEX EXCEEDS ALLOWABLE VALUES---\n\n");
+        printf("---ERROR INDEX EXCEDS ALLOWABLE VALUES---\n\n");
         return false;
     }
 

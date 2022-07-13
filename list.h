@@ -8,8 +8,8 @@
 
 struct linked_vlan_list
 {
-    struct linked_vlan_list* next;
-    struct linked_vlan_list* before;
+    struct linked_vlan_list *next;
+    struct linked_vlan_list *before;
     char tpid[TPID_MAX_LENGHT];
     unsigned short int vlan_id;
 };
@@ -89,14 +89,12 @@ bool vlan_add_value_linked_vlan_list(struct linked_vlan_list **list,
 //option 2
 bool vlan_delete_value_linked_vlan_list(struct linked_vlan_list *list)
 {
-    printf("log 1 delet\n");
     if(list == NULL)
         return false;
 
     //case when there is only one value in linked vlan list
     if((list)->before == NULL && (list)->next == NULL)
     {
-        printf("log 2 delete \n");
         free(list);
         return true;
     }
@@ -117,8 +115,9 @@ bool vlan_delete_value_linked_vlan_list(struct linked_vlan_list *list)
 
 
 //frees the memory from the pointer to the end to the list
-void delete_linked_vlan_list(struct linked_vlan_list *list)
+void vlan_delete_linked_vlan_list(struct linked_vlan_list *list)
 {
+    printf("log 0 list->vlan_id %d", list->vlan_id);
     if (list == NULL)
         return;
 

@@ -26,7 +26,8 @@ void print_menu(void)
     "1 - Add value to theg array \n"
     "2 - Delete value from the array \n"
     "3 - Display values from the array \n"
-    "4 - Delete the whole array, release the memory and exit the program\n\n");
+    "4 - Delete the whole array\n"
+    "5 - Delete the whole array, release the memory and exit the program\n\n");
 }
 
 
@@ -45,7 +46,9 @@ void print_help(void)
     "\n"
     "4 - Delete the array and clean the memory \n "
     "This option lets you release the memory that was taken for this array \n"
-    "and also deletes the whole array. \n");
+    "and also deletes the whole array. \n"
+    "5 - Exit the program (it also releses all the memory taken \n"
+    "by the program\n");
 }
 
 
@@ -110,20 +113,22 @@ bool delete_value_linked_vlan_list(struct linked_vlan_list **list_root,
             *list_leaf = list->before;
 
         aux = list->next;
-        if (!vlan_delete_value_linked_vlan_list(list))
+        if (vlan_delete_value_linked_vlan_list(list))
         {
-            //if the value of the root was changed and deleting the first value
-            //failed then we need to move the root back
-            if(!(*list_root)->before)
-                (*list_root)=(*list_root)->before;
-        
-            if(!(*list_leaf)->next)
-                (*list_leaf) = (*list_leaf)->next;
-
-            printf("---FAILED TO DELETE THE VALUE---");
-            return false;
+            list = aux;
+            continue;
         }
-        list = aux;
+
+        //if the value of the root was changed and deleting the first value
+        //failed then we need to move the root back or leaf up
+        if(!(*list_root)->before)
+            (*list_root)=(*list_root)->before;
+
+        if(!(*list_leaf)->next)
+            (*list_leaf) = (*list_leaf)->next;
+
+        printf("---FAILED TO DELETE THE VALUE---");
+        return false;
     }
 
     printf("---VALUES DELETED---\n");
@@ -187,9 +192,12 @@ bool function_choice(unsigned short int choice,
             print_values_linked_vlan_list(*vlan_list_root);
             break;
         case 4:
-            delete_linked_vlan_list(*vlan_list_root);
+            vlan_delete_linked_vlan_list(*vlan_list_root);
+            vlan_list_root = NULL;
+            vlan_list = NULL;
             break;
         case 5:
+            vlan_delete_linked_vlan_list(*vlan_list_root);
             return false; //exiting
         default:
             printf("---ERROR WRONG INPUT OPTION TRY AGAIN---\n");
@@ -220,7 +228,6 @@ int main(void)
 
         if(!function_choice(choice, &vlan_list, &vlan_list_root))
         {
-            delete_linked_vlan_list(vlan_list_root);
             printf("\n---EXITING---\n");
             break;
         }

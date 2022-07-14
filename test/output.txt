@@ -1,11 +1,11 @@
 
 ---INPUT OPTION YOU WANT TO EXECUTE---
 0 - Help
-1 - Add value to theg array 
+1 - Add value to the array 
 2 - Delete value from the array 
 3 - Display values from the array 
 4 - Delete the whole array
-5 - Delete the whole array, release the memory and exit the program
+5 - Exit the program
 
 ---ADDING VALUES---
 1 - input Vlan ID
@@ -14,11 +14,11 @@
 
 ---INPUT OPTION YOU WANT TO EXECUTE---
 0 - Help
-1 - Add value to theg array 
+1 - Add value to the array 
 2 - Delete value from the array 
 3 - Display values from the array 
 4 - Delete the whole array
-5 - Delete the whole array, release the memory and exit the program
+5 - Exit the program
 
 ---ADDING VALUES---
 1 - input Vlan ID
@@ -27,11 +27,11 @@
 
 ---INPUT OPTION YOU WANT TO EXECUTE---
 0 - Help
-1 - Add value to theg array 
+1 - Add value to the array 
 2 - Delete value from the array 
 3 - Display values from the array 
 4 - Delete the whole array
-5 - Delete the whole array, release the memory and exit the program
+5 - Exit the program
 
 ---ADDING VALUES---
 1 - input Vlan ID
@@ -40,11 +40,11 @@
 
 ---INPUT OPTION YOU WANT TO EXECUTE---
 0 - Help
-1 - Add value to theg array 
+1 - Add value to the array 
 2 - Delete value from the array 
 3 - Display values from the array 
 4 - Delete the whole array
-5 - Delete the whole array, release the memory and exit the program
+5 - Exit the program
 
 ---ADDING VALUES---
 1 - input Vlan ID
@@ -53,11 +53,11 @@
 
 ---INPUT OPTION YOU WANT TO EXECUTE---
 0 - Help
-1 - Add value to theg array 
+1 - Add value to the array 
 2 - Delete value from the array 
 3 - Display values from the array 
 4 - Delete the whole array
-5 - Delete the whole array, release the memory and exit the program
+5 - Exit the program
 
 ---ADDING VALUES---
 1 - input Vlan ID
@@ -66,11 +66,11 @@
 
 ---INPUT OPTION YOU WANT TO EXECUTE---
 0 - Help
-1 - Add value to theg array 
+1 - Add value to the array 
 2 - Delete value from the array 
 3 - Display values from the array 
 4 - Delete the whole array
-5 - Delete the whole array, release the memory and exit the program
+5 - Exit the program
 
 ---ADDING VALUES---
 1 - input Vlan ID
@@ -79,63 +79,14 @@
 
 ---INPUT OPTION YOU WANT TO EXECUTE---
 0 - Help
-1 - Add value to theg array 
+1 - Add value to the array 
 2 - Delete value from the array 
 3 - Display values from the array 
 4 - Delete the whole array
-5 - Delete the whole array, release the memory and exit the program
+5 - Exit the program
 
----ADDING VALUES---
-1 - input Vlan ID
-2 - input tpid
----VALUE ADDED---
-
----INPUT OPTION YOU WANT TO EXECUTE---
-0 - Help
-1 - Add value to theg array 
-2 - Delete value from the array 
-3 - Display values from the array 
-4 - Delete the whole array
-5 - Delete the whole array, release the memory and exit the program
-
----ADDING VALUES---
-1 - input Vlan ID
-2 - input tpid
----VALUE ADDED---
-
----INPUT OPTION YOU WANT TO EXECUTE---
-0 - Help
-1 - Add value to theg array 
-2 - Delete value from the array 
-3 - Display values from the array 
-4 - Delete the whole array
-5 - Delete the whole array, release the memory and exit the program
-
----ADDING VALUES---
-1 - input Vlan ID
-2 - input tpid
----VALUE ADDED---
-
----INPUT OPTION YOU WANT TO EXECUTE---
-0 - Help
-1 - Add value to theg array 
-2 - Delete value from the array 
-3 - Display values from the array 
-4 - Delete the whole array
-5 - Delete the whole array, release the memory and exit the program
-
----ADDING VALUES---
-1 - input Vlan ID
-2 - input tpid
----VALUE ADDED---
-
----INPUT OPTION YOU WANT TO EXECUTE---
-0 - Help
-1 - Add value to theg array 
-2 - Delete value from the array 
-3 - Display values from the array 
-4 - Delete the whole array
-5 - Delete the whole array, release the memory and exit the program
+---DELETING VALUES---
+which value do you want to delete ?
 
 ---PRINTING VALUES---
 
@@ -148,9 +99,6 @@
    vlan id   2
       tpid 0x9100
 
-   vlan id   3
-      tpid 0x88a8
-
    vlan id   0
       tpid 0x9100
 
@@ -160,25 +108,83 @@
    vlan id   1
       tpid 0x8100
 
+Value: 
+---VALUES DELETED---
+
+---INPUT OPTION YOU WANT TO EXECUTE---
+0 - Help
+1 - Add value to the array 
+2 - Delete value from the array 
+3 - Display values from the array 
+4 - Delete the whole array
+5 - Exit the program
+
+---PRINTING VALUES---
+
+   vlan id   0
+      tpid 0x9100
+
    vlan id   2
       tpid 0x9100
 
-   vlan id   3
-      tpid 0x88a8
+   vlan id   0
+      tpid 0x9100
 
    vlan id   0
       tpid 0x9100
 
 ---INPUT OPTION YOU WANT TO EXECUTE---
 0 - Help
-1 - Add value to theg array 
+1 - Add value to the array 
 2 - Delete value from the array 
 3 - Display values from the array 
 4 - Delete the whole array
-5 - Delete the whole array, release the memory and exit the program
+5 - Exit the program
 
-log 0 list->vlan_id 0
+
 ---INPUT OPTION YOU WANT TO EXECUTE---
 0 - Help
-1 - Add value to theg array 
-2 - Delete value from
+1 - Add value to the array 
+2 - Delete value from the array 
+3 - Display values from the array 
+4 - Delete the whole array
+5 - Exit the program
+
+---NO VALUES TO PRINT---
+
+---INPUT OPTION YOU WANT TO EXECUTE---
+0 - Help
+1 - Add value to the array 
+2 - Delete value from the array 
+3 - Display values from the array 
+4 - Delete the whole array
+5 - Exit the program
+
+---ADDING VALUES---
+1 - input Vlan ID
+2 - input tpid
+---VALUE ADDED---
+
+---INPUT OPTION YOU WANT TO EXECUTE---
+0 - Help
+1 - Add value to the array 
+2 - Delete value from the array 
+3 - Display values from the array 
+4 - Delete the whole array
+5 - Exit the program
+
+---PRINTING VALUES---
+
+   vlan id   1
+      tpid 0x8100
+
+---INPUT OPTION YOU WANT TO EXECUTE---
+0 - Help
+1 - Add value to the array 
+2 - Delete value from the array 
+3 - Display values from the array 
+4 - Delete the whole array
+5 - Exit the program
+
+
+---EXITING---

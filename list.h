@@ -1,3 +1,6 @@
+#ifndef LIST_H
+#define LIST_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -33,3 +36,5 @@ bool vlan_delete_value_linked_vlan_list(struct linked_vlan_list *list);
 
 //frees the memory from the pointer to the end to the list
 void vlan_delete_linked_vlan_list(struct linked_vlan_list *list);
+
+#endif //LIST_H HEADER GUARD

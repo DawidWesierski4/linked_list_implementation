@@ -1,23 +1,24 @@
 /*==============================================================================
 * Title: Linked list implementation concept 
 *
-* Author: Dawid Wesierski
+* Author: Dawid Wesierski
 * Language: C
 * To Compile: gcc 11.2.0
 * Version: 0.1.0.0
 * Date: 08.07.2022
 *
 * ------------------------------------------------------------------------------
-* 
+*
 * Description:
 * this program shows the implementation of the linked list concept it works 
 * similary to list the memory is dynamicly allocated you can print the value
-*     
-* 
+*
 *=============================================================================*/
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "list.h"
-
 
 void print_menu(void)
 {
